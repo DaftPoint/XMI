@@ -27,11 +27,11 @@
 define(function (require, exports, module) {
     "use strict";
 
-    var IdGenerator      = app.getModule("core/IdGenerator"),
-        Core             = app.getModule("core/Core"),
+    var IdGenerator = app.getModule("core/IdGenerator"),
+        Core = app.getModule("core/Core"),
         MetaModelManager = app.getModule("core/MetaModelManager"),
-        Repository       = app.getModule("core/Repository"),
-        UML              = app.getModule("uml/UML");
+        Repository = app.getModule("core/Repository"),
+        UML = app.getModule("uml/UML");
 
     var Writer = require("XMI21Writer");
 
@@ -77,10 +77,12 @@ define(function (require, exports, module) {
         var json = Writer.elements["Model"](elem);
         // Write documentation as xmi:Extension
         var _writeExtension = false,
-            _extensionNode  = {};
+            _extensionNode = {};
         if (elem.documentation && elem.documentation.trim().length > 0) {
             _writeExtension = true;
-            _extensionNode.documentation = { value: elem.documentation.trim() };
+            _extensionNode.documentation = {
+                value: elem.documentation.trim()
+            };
         }
         // Write tags as xmi:Extension
         if (elem.tags && elem.tags.length > 0) {
@@ -89,24 +91,24 @@ define(function (require, exports, module) {
             _.each(elem.tags, function (tag) {
                 var _tag = {};
                 switch (tag.kind) {
-                case Core.TK_STRING:
-                    _tag[tag.name] = tag.value;
-                    _extensionNode.tag.push(_tag);
-                    break;
-                case Core.TK_REFERENCE:
-                    if (tag.reference && tag.reference._id) {
-                        _tag[tag.name] = tag.reference._id;
+                    case Core.TK_STRING:
+                        _tag[tag.name] = tag.value;
                         _extensionNode.tag.push(_tag);
-                    }
-                    break;
-                case Core.TK_BOOLEAN:
-                    _tag[tag.name] = tag.checked;
-                    _extensionNode.tag.push(_tag);
-                    break;
-                case Core.TK_NUMBER:
-                    _tag[tag.name] = tag.number;
-                    _extensionNode.tag.push(_tag);
-                    break;
+                        break;
+                    case Core.TK_REFERENCE:
+                        if (tag.reference && tag.reference._id) {
+                            _tag[tag.name] = tag.reference._id;
+                            _extensionNode.tag.push(_tag);
+                        }
+                        break;
+                    case Core.TK_BOOLEAN:
+                        _tag[tag.name] = tag.checked;
+                        _extensionNode.tag.push(_tag);
+                        break;
+                    case Core.TK_NUMBER:
+                        _tag[tag.name] = tag.number;
+                        _extensionNode.tag.push(_tag);
+                        break;
                 }
             });
         }
@@ -145,104 +147,162 @@ define(function (require, exports, module) {
 
     Writer.enumerations["UMLVisibilityKind"] = function (value) {
         switch (value) {
-        case UML.VK_PUBLIC    : return "public";
-        case UML.VK_PROTECTED : return "protected";
-        case UML.VK_PRIVATE   : return "private";
-        case UML.VK_PACKAGE   : return "package";
-        default               : return "public";
+            case UML.VK_PUBLIC:
+                return "public";
+            case UML.VK_PROTECTED:
+                return "protected";
+            case UML.VK_PRIVATE:
+                return "private";
+            case UML.VK_PACKAGE:
+                return "package";
+            default:
+                return "public";
         }
     };
 
     Writer.enumerations["UMLAggregationKind"] = function (value) {
         switch (value) {
-        case UML.AK_NONE      : return "none";
-        case UML.AK_SHARED    : return "shared";
-        case UML.AK_COMPOSITE : return "composite";
-        default               : return "none";
+            case UML.AK_NONE:
+                return "none";
+            case UML.AK_SHARED:
+                return "shared";
+            case UML.AK_COMPOSITE:
+                return "composite";
+            default:
+                return "none";
         }
     };
 
     Writer.enumerations["UMLDirectionKind"] = function (value) {
         switch (value) {
-        case UML.DK_IN     : return "in";
-        case UML.DK_INOUT  : return "inout";
-        case UML.DK_OUT    : return "out";
-        case UML.DK_RETURN : return "return";
-        default            : return "in";
+            case UML.DK_IN:
+                return "in";
+            case UML.DK_INOUT:
+                return "inout";
+            case UML.DK_OUT:
+                return "out";
+            case UML.DK_RETURN:
+                return "return";
+            default:
+                return "in";
         }
     };
 
     Writer.enumerations["UMLCallConcurrencyKind"] = function (value) {
         switch (value) {
-        case UML.CCK_SEQUENTIAL : return "sequential";
-        case UML.CCK_GUARDED    : return "guarded";
-        case UML.CCK_CONCURRENT : return "concurrent";
-        default                 : return "sequential";
+            case UML.CCK_SEQUENTIAL:
+                return "sequential";
+            case UML.CCK_GUARDED:
+                return "guarded";
+            case UML.CCK_CONCURRENT:
+                return "concurrent";
+            default:
+                return "sequential";
         }
     };
 
     Writer.enumerations["UMLMessageSort"] = function (value) {
         switch (value) {
-        case UML.MS_SYNCHCALL     : return "synchCall";
-        case UML.MS_ASYNCHCALL    : return "asynchCall";
-        case UML.MS_ASYNCHSIGNAL  : return "asynchSignal";
-        case UML.MS_CREATEMESSAGE : return "createMessage";
-        case UML.MS_DELETEMESSAGE : return "deleteMessage";
-        case UML.MS_REPLY         : return "reply";
-        default                   : return "synchCall";
+            case UML.MS_SYNCHCALL:
+                return "synchCall";
+            case UML.MS_ASYNCHCALL:
+                return "asynchCall";
+            case UML.MS_ASYNCHSIGNAL:
+                return "asynchSignal";
+            case UML.MS_CREATEMESSAGE:
+                return "createMessage";
+            case UML.MS_DELETEMESSAGE:
+                return "deleteMessage";
+            case UML.MS_REPLY:
+                return "reply";
+            default:
+                return "synchCall";
         }
     };
 
     Writer.enumerations["UMLInteractionOperatorKind"] = function (value) {
         switch (value) {
-        case UML.IOK_ALT      : return "alt";
-        case UML.IOK_OPT      : return "opt";
-        case UML.IOK_PAR      : return "par";
-        case UML.IOK_LOOP     : return "loop";
-        case UML.IOK_CRITICAL : return "critical";
-        case UML.IOK_NEG      : return "neg";
-        case UML.IOK_ASSERT   : return "assert";
-        case UML.IOK_STRICT   : return "strict";
-        case UML.IOK_SEQ      : return "seq";
-        case UML.IOK_IGNORE   : return "ignore";
-        case UML.IOK_CONSIDER : return "consider";
-        case UML.IOK_BREAK    : return "break";
-        default               : return "seq";
+            case UML.IOK_ALT:
+                return "alt";
+            case UML.IOK_OPT:
+                return "opt";
+            case UML.IOK_PAR:
+                return "par";
+            case UML.IOK_LOOP:
+                return "loop";
+            case UML.IOK_CRITICAL:
+                return "critical";
+            case UML.IOK_NEG:
+                return "neg";
+            case UML.IOK_ASSERT:
+                return "assert";
+            case UML.IOK_STRICT:
+                return "strict";
+            case UML.IOK_SEQ:
+                return "seq";
+            case UML.IOK_IGNORE:
+                return "ignore";
+            case UML.IOK_CONSIDER:
+                return "consider";
+            case UML.IOK_BREAK:
+                return "break";
+            default:
+                return "seq";
         }
     };
 
     Writer.enumerations["UMLPseudostateKind"] = function (value) {
         switch (value) {
-        case UML.PSK_INITIAL        : return "initial";
-        case UML.PSK_DEEPHISTORY    : return "deepHistory";
-        case UML.PSK_SHALLOWHISTORY : return "shallowHistory";
-        case UML.PSK_JOIN           : return "join";
-        case UML.PSK_FORK           : return "fork";
-        case UML.PSK_JUNCTION       : return "junction";
-        case UML.PSK_CHOICE         : return "choice";
-        case UML.PSK_ENTRYPOINT     : return "entryPoint";
-        case UML.PSK_EXITPOINT      : return "exitPoint";
-        case UML.PSK_TERMINATE      : return "terminate";
-        default                     : return "initial";
+            case UML.PSK_INITIAL:
+                return "initial";
+            case UML.PSK_DEEPHISTORY:
+                return "deepHistory";
+            case UML.PSK_SHALLOWHISTORY:
+                return "shallowHistory";
+            case UML.PSK_JOIN:
+                return "join";
+            case UML.PSK_FORK:
+                return "fork";
+            case UML.PSK_JUNCTION:
+                return "junction";
+            case UML.PSK_CHOICE:
+                return "choice";
+            case UML.PSK_ENTRYPOINT:
+                return "entryPoint";
+            case UML.PSK_EXITPOINT:
+                return "exitPoint";
+            case UML.PSK_TERMINATE:
+                return "terminate";
+            default:
+                return "initial";
         }
     };
 
     Writer.enumerations["UMLTransitionKind"] = function (value) {
         switch (value) {
-        case UML.TK_EXTERNAL : return "external";
-        case UML.TK_INTERNAL : return "internal";
-        case UML.TK_LOCAL    : return "local";
-        default              : return "external";
+            case UML.TK_EXTERNAL:
+                return "external";
+            case UML.TK_INTERNAL:
+                return "internal";
+            case UML.TK_LOCAL:
+                return "local";
+            default:
+                return "external";
         }
     };
 
     Writer.enumerations["UMLObjectNodeOrderingKind"] = function (value) {
         switch (value) {
-        case UML.ONOK_UNORDERED : return "unordered";
-        case UML.ONOK_ORDERED   : return "ordered";
-        case UML.ONOK_LIFO      : return "LIFO";
-        case UML.ONOK_FIFO      : return "FIFO";
-        default                 : return "FIFO";
+            case UML.ONOK_UNORDERED:
+                return "unordered";
+            case UML.ONOK_ORDERED:
+                return "ordered";
+            case UML.ONOK_LIFO:
+                return "LIFO";
+            case UML.ONOK_FIFO:
+                return "FIFO";
+            default:
+                return "FIFO";
         }
     };
 
@@ -252,9 +312,17 @@ define(function (require, exports, module) {
         var json = Writer.elements["ExtensibleModel"](elem);
         // Write stereotype (it's not Standard, but it's the most convenient way to read
         if (_.isObject(elem.stereotype) && elem.stereotype._id) {
-            Writer.writeExtension(json, { "stereotype": { "value": elem.stereotype._id }});
+            Writer.writeExtension(json, {
+                "stereotype": {
+                    "value": elem.stereotype._id
+                }
+            });
         } else if (_.isString(elem.stereotype)) {
-            Writer.writeExtension(json, { "stereotype": { "value": elem.stereotype }});
+            Writer.writeExtension(json, {
+                "stereotype": {
+                    "value": elem.stereotype
+                }
+            });
         }
         Writer.writeEnum(json, 'visibility', 'UMLVisibilityKind', elem.visibility);
         if (elem.templateParameters && elem.templateParameters.length > 0) {
@@ -306,9 +374,9 @@ define(function (require, exports, module) {
             Writer.writeRef(json, 'type', elem.type);
         } else if (_.isString(elem.type) && elem.type.trim().length > 0) {
             var _typeNode = {
-                "xmi:id"   : elem.type + "_id",
-                "xmi:type" : "uml:DataType",
-                "name"     : elem.type
+                "xmi:id": elem.type + "_id",
+                "xmi:type": "uml:DataType",
+                "name": elem.type
             };
             Writer.addToDeferedNode(_typeNode);
             Writer.writeString(json, 'type', _typeNode["xmi:id"]);
@@ -372,7 +440,11 @@ define(function (require, exports, module) {
         Writer.writeBoolean(json, 'isQuery', elem.isQuery);
         Writer.writeBoolean(json, 'isAbstract', elem.isAbstract);
         if (elem.specification && elem.specification.trim().length > 0) {
-            Writer.writeExtension(json, { specification: { value: elem.specification } });
+            Writer.writeExtension(json, {
+                specification: {
+                    value: elem.specification
+                }
+            });
         }
         if (elem.preconditions && elem.preconditions.length > 0) {
             Writer.writeElementArray(json, 'precondition', elem.preconditions);
@@ -389,8 +461,12 @@ define(function (require, exports, module) {
 
     Writer.elements["UMLClassifier"] = function (elem) {
         var json = Writer.elements["UMLModelElement"](elem);
-        var _attrs = _.reject(elem.attributes, function (e) { return e instanceof type.UMLPort; });
-        var _ports = _.filter(elem.attributes, function (e) { return e instanceof type.UMLPort; });
+        var _attrs = _.reject(elem.attributes, function (e) {
+            return e instanceof type.UMLPort;
+        });
+        var _ports = _.filter(elem.attributes, function (e) {
+            return e instanceof type.UMLPort;
+        });
         Writer.writeElementArray(json, 'ownedAttribute', _attrs);
         Writer.writeElementArray(json, 'ownedPort', _ports);
         Writer.writeElementArray(json, 'ownedOperation', elem.operations);
@@ -581,7 +657,7 @@ define(function (require, exports, module) {
     Writer.elements["UMLInstance"] = function (elem) {
         var json = Writer.elements["UMLModelElement"](elem);
         Writer.writeElementArray(json, 'slot', elem.slots);
-        Writer.writeRefArray(json, 'classifier', [ elem.classifier ]);
+        Writer.writeRefArray(json, 'classifier', [elem.classifier]);
         return json;
     };
 
@@ -613,11 +689,15 @@ define(function (require, exports, module) {
         var json = Writer.elements["UMLUndirectedRelationship"](elem);
         Writer.setType(json, 'uml:InstanceSpecification');
         if (elem.association) {
-            Writer.writeRefArray(json, 'classifier', [ elem.association ]);
+            Writer.writeRefArray(json, 'classifier', [elem.association]);
         }
         Writer.writeExtension(json, {
-            "linkEnd1": { "value": elem.end1.reference._id },
-            "linkEnd2": { "value": elem.end2.reference._id }
+            "linkEnd1": {
+                "value": elem.end1.reference._id
+            },
+            "linkEnd2": {
+                "value": elem.end2.reference._id
+            }
         });
         return json;
     };
@@ -670,7 +750,11 @@ define(function (require, exports, module) {
         var json = Writer.elements["UMLDependency"](elem);
         Writer.setType(json, 'uml:Dependency');
         if (elem.roleName && elem.roleName.length > 0) {
-            Writer.writeExtension(json, { roleName: { value: elem.roleName }});
+            Writer.writeExtension(json, {
+                roleName: {
+                    value: elem.roleName
+                }
+            });
         }
         return json;
     };
@@ -698,7 +782,11 @@ define(function (require, exports, module) {
     Writer.elements["UMLSubsystem"] = function (elem) {
         var json = Writer.elements["UMLComponent"](elem);
         Writer.setType(json, 'uml:Component');
-        Writer.writeExtension(json, { "stereotype": { "value": "subsystem" }});
+        Writer.writeExtension(json, {
+            "stereotype": {
+                "value": "subsystem"
+            }
+        });
         return json;
     };
 
@@ -771,9 +859,9 @@ define(function (require, exports, module) {
         Writer.writeRefArray(json, 'extensionLocation', elem.extensionLocations);
         if (elem.condition && elem.condition.length > 0) {
             json["condition"] = {
-                "xmi:id"        : IdGenerator.generateGuid(),
-                "xmi:type"      : "uml:Constraint",
-                "specification" : elem.condition
+                "xmi:id": IdGenerator.generateGuid(),
+                "xmi:type": "uml:Constraint",
+                "specification": elem.condition
             };
         }
         return json;
@@ -807,25 +895,25 @@ define(function (require, exports, module) {
     Writer.elements["UMLEvent"] = function (elem) {
         var json = Writer.elements["UMLModelElement"](elem);
         switch (elem.kind) {
-        case UML.EK_SIGNAL:
-            Writer.setType(json, 'uml:SignalEvent');
-            Writer.writeRef(json, 'signal', elem.targetSignal);
-            break;
-        case UML.EK_CALL:
-            Writer.setType(json, 'uml:CallEvent');
-            Writer.writeRef(json, 'operation', elem.targetOperation);
-            break;
-        case UML.EK_CHANGE:
-            Writer.setType(json, 'uml:ChangeEvent');
-            Writer.writeValueSpec(json, 'changeExpression', 'uml:OpaqueExpression', elem.expression);
-            break;
-        case UML.EK_TIME:
-            Writer.setType(json, 'uml:TimeEvent');
-            Writer.writeValueSpec(json, 'when', 'uml:OpaqueExpression', elem.expression);
-            break;
-        case UML.EK_ANYRECEIVE:
-            Writer.setType(json, 'uml:AnyReceiveEvent');
-            break;
+            case UML.EK_SIGNAL:
+                Writer.setType(json, 'uml:SignalEvent');
+                Writer.writeRef(json, 'signal', elem.targetSignal);
+                break;
+            case UML.EK_CALL:
+                Writer.setType(json, 'uml:CallEvent');
+                Writer.writeRef(json, 'operation', elem.targetOperation);
+                break;
+            case UML.EK_CHANGE:
+                Writer.setType(json, 'uml:ChangeEvent');
+                Writer.writeValueSpec(json, 'changeExpression', 'uml:OpaqueExpression', elem.expression);
+                break;
+            case UML.EK_TIME:
+                Writer.setType(json, 'uml:TimeEvent');
+                Writer.writeValueSpec(json, 'when', 'uml:OpaqueExpression', elem.expression);
+                break;
+            case UML.EK_ANYRECEIVE:
+                Writer.setType(json, 'uml:AnyReceiveEvent');
+                break;
         }
         return json;
     };
@@ -849,14 +937,14 @@ define(function (require, exports, module) {
         });
         _.each(elem.messages, function (e) {
             var _fromOccurrence = {
-                    "xmi:id"   : IdGenerator.generateGuid(),
-                    "xmi:type" : "uml:OccurrenceSpecification",
-                    "covered"  : e.source._id
+                    "xmi:id": IdGenerator.generateGuid(),
+                    "xmi:type": "uml:OccurrenceSpecification",
+                    "covered": e.source._id
                 },
                 _toOccurrence = {
-                    "xmi:id"   : IdGenerator.generateGuid(),
-                    "xmi:type" : "uml:OccurrenceSpecification",
-                    "covered"  : e.target._id
+                    "xmi:id": IdGenerator.generateGuid(),
+                    "xmi:type": "uml:OccurrenceSpecification",
+                    "covered": e.target._id
                 };
             var _message = Writer.writeElement(json, 'message', e);
             if (e.source instanceof type.UMLEndpoint) {
@@ -882,9 +970,9 @@ define(function (require, exports, module) {
         Writer.writeRef(json, 'covered', elem.covered);
         if (elem.invariant && elem.invariant.length > 0) {
             json["invariant"] = {
-                "xmi:id"        : IdGenerator.generateGuid(),
-                "xmi:type"      : "uml:Constraint",
-                "specification" : elem.invariant
+                "xmi:id": IdGenerator.generateGuid(),
+                "xmi:type": "uml:Constraint",
+                "specification": elem.invariant
             };
         }
         return json;
@@ -902,9 +990,9 @@ define(function (require, exports, module) {
         Writer.setType(json, 'uml:InteractionOperand');
         if (elem.guard && elem.guard.length > 0) {
             json["guard"] = {
-                "xmi:id"        : IdGenerator.generateGuid(),
-                "xmi:type"      : "uml:Constraint",
-                "specification" : elem.guard
+                "xmi:id": IdGenerator.generateGuid(),
+                "xmi:type": "uml:Constraint",
+                "specification": elem.guard
             };
         }
         // TODO: fragment (see UML Spec, it's about OccurrentSpecifications of Messages included in this operand)
@@ -962,7 +1050,11 @@ define(function (require, exports, module) {
             Writer.writeValueSpec(json, 'argument', 'uml:LiteralString', elem.arguments);
         }
         if (elem.assignmentTarget && elem.assignmentTarget.length > 0) {
-            Writer.writeExtension(json, { assignmentTarget: { value: elem.assignmentTarget }});
+            Writer.writeExtension(json, {
+                assignmentTarget: {
+                    value: elem.assignmentTarget
+                }
+            });
         }
         return json;
     };
@@ -1030,18 +1122,18 @@ define(function (require, exports, module) {
         Writer.writeEnum(json, 'kind', 'UMLTransitionKind', elem.kind);
         if (elem.guard && elem.guard.length > 0) {
             json["guard"] = {
-                "xmi:id"        : IdGenerator.generateGuid(),
-                "xmi:type"      : "uml:Constraint",
-                "specification" : elem.guard
+                "xmi:id": IdGenerator.generateGuid(),
+                "xmi:type": "uml:Constraint",
+                "specification": elem.guard
             };
         }
         _.each(elem.triggers, function (e) {
             Writer.writeElement(json, 'ownedMember', e);
             Writer.addTo(json, 'trigger', {
-                "xmi:id"   : IdGenerator.generateGuid(),
-                "xmi:type" : "uml:Trigger",
-                "name"     : e.name,
-                "event"    : e._id
+                "xmi:id": IdGenerator.generateGuid(),
+                "xmi:type": "uml:Trigger",
+                "name": e.name,
+                "event": e._id
             });
         });
         Writer.writeElementArray(json, 'trigger', elem.triggers);
@@ -1089,45 +1181,45 @@ define(function (require, exports, module) {
     Writer.elements["UMLAction"] = function (elem) {
         var json = Writer.elements["UMLActivityNode"](elem);
         switch (elem.kind) {
-        case UML.ACK_OPAQUE:
-            Writer.setType(json, 'uml:OpaqueAction');
-            break;
-        case UML.ACK_CREATE:
-            Writer.setType(json, 'uml:CreateObjectAction');
-            Writer.writeRef(json, 'classifier', elem.target);
-            break;
-        case UML.ACK_DESTROY:
-            Writer.setType(json, 'uml:DestroyObjectAction');
-            Writer.writeRef(json, 'target', elem.target);
-            break;
-        case UML.ACK_READ:
-            Writer.setType(json, 'uml:ReadVariableAction');
-            break;
-        case UML.ACK_WRITE:
-            Writer.setType(json, 'uml:WriteVariableAction');
-            break;
-        case UML.ACK_INSERT:
-            Writer.setType(json, 'uml:OpaqueAction');
-            break;
-        case UML.ACK_DELETE:
-            Writer.setType(json, 'uml:OpaqueAction');
-            break;
-        case UML.ACK_SENDSIGNAL:
-            Writer.setType(json, 'uml:SendSignalAction');
-            Writer.writeRef(json, 'signal', elem.target);
-            break;
-        case UML.ACK_ACCEPTSIGNAL:
-            Writer.setType(json, 'uml:AcceptEventAction');
-            break;
-        case UML.ACK_TRIGGEREVENT:
-            Writer.setType(json, 'uml:OpaqueAction');
-            break;
-        case UML.ACK_ACCEPTEVENT:
-            Writer.setType(json, 'uml:AcceptEventAction');
-            break;
-        case UML.ACK_STRUCTURED:
-            Writer.setType(json, 'uml:StructuredActivityNode');
-            break;
+            case UML.ACK_OPAQUE:
+                Writer.setType(json, 'uml:OpaqueAction');
+                break;
+            case UML.ACK_CREATE:
+                Writer.setType(json, 'uml:CreateObjectAction');
+                Writer.writeRef(json, 'classifier', elem.target);
+                break;
+            case UML.ACK_DESTROY:
+                Writer.setType(json, 'uml:DestroyObjectAction');
+                Writer.writeRef(json, 'target', elem.target);
+                break;
+            case UML.ACK_READ:
+                Writer.setType(json, 'uml:ReadVariableAction');
+                break;
+            case UML.ACK_WRITE:
+                Writer.setType(json, 'uml:WriteVariableAction');
+                break;
+            case UML.ACK_INSERT:
+                Writer.setType(json, 'uml:OpaqueAction');
+                break;
+            case UML.ACK_DELETE:
+                Writer.setType(json, 'uml:OpaqueAction');
+                break;
+            case UML.ACK_SENDSIGNAL:
+                Writer.setType(json, 'uml:SendSignalAction');
+                Writer.writeRef(json, 'signal', elem.target);
+                break;
+            case UML.ACK_ACCEPTSIGNAL:
+                Writer.setType(json, 'uml:AcceptEventAction');
+                break;
+            case UML.ACK_TRIGGEREVENT:
+                Writer.setType(json, 'uml:OpaqueAction');
+                break;
+            case UML.ACK_ACCEPTEVENT:
+                Writer.setType(json, 'uml:AcceptEventAction');
+                break;
+            case UML.ACK_STRUCTURED:
+                Writer.setType(json, 'uml:StructuredActivityNode');
+                break;
         }
         Writer.writeElementArray(json, 'input', elem.inputs);
         Writer.writeElementArray(json, 'output', elem.outputs);
@@ -1149,9 +1241,9 @@ define(function (require, exports, module) {
             Writer.writeRef(json, 'type', elem.type);
         } else if (_.isString(elem.type) && elem.type.trim().length > 0) {
             var _typeNode = {
-                "xmi:id"   : elem.type + "_id",
-                "xmi:type" : "uml:DataType",
-                "name"     : elem.type
+                "xmi:id": elem.type + "_id",
+                "xmi:type": "uml:DataType",
+                "name": elem.type
             };
             Writer.addToDeferedNode(_typeNode);
             Writer.writeString(json, 'type', _typeNode["xmi:id"]);
@@ -1240,6 +1332,12 @@ define(function (require, exports, module) {
         return json;
     };
 
+    Writer.elements["UMLExceptionHandler"] = function (elem) {
+        var json = Writer.elements["UMLActivityEdge"](elem);
+        Writer.setType(json, 'uml:ExceptionHandler');
+        return json;
+    };
+
     Writer.elements["UMLObjectFlow"] = function (elem) {
         var json = Writer.elements["UMLActivityEdge"](elem);
         Writer.setType(json, 'uml:ObjectFlow');
@@ -1263,16 +1361,14 @@ define(function (require, exports, module) {
         });
         if (_extensions.length > 0) {
             var _extension = {
-                "xmi:id"    : IdGenerator.generateGuid(),
-                "xmi:type"  : "uml:Extension",
-                "memberEnd" : [],
-                "ownedEnd"  : [
-                    {
-                        "xmi:id"   : IdGenerator.generateGuid(),
-                        "xmi:type" : "uml:ExtensionEnd",
-                        "type"     : elem._id
-                    }
-                ]
+                "xmi:id": IdGenerator.generateGuid(),
+                "xmi:type": "uml:Extension",
+                "memberEnd": [],
+                "ownedEnd": [{
+                    "xmi:id": IdGenerator.generateGuid(),
+                    "xmi:type": "uml:ExtensionEnd",
+                    "type": elem._id
+                }]
             };
             Writer.addTo(json, 'ownedMember', _extension);
             _.each(_extensions, function (ex) {
@@ -1281,11 +1377,13 @@ define(function (require, exports, module) {
                     _type = ex.target.name.substring(3, ex.target.name.length);
                 }
                 var node = {
-                    "xmi:id"      : ex._id,
-                    "xmi:type"    : "uml:Property",
-                    "name"        : "base_" + _type,
-                    "association" : _extension["xmi:id"],
-                    "type"        : { "href" : "http://schema.omg.org/spec/UML/2.0/uml.xml#" + _type }
+                    "xmi:id": ex._id,
+                    "xmi:type": "uml:Property",
+                    "name": "base_" + _type,
+                    "association": _extension["xmi:id"],
+                    "type": {
+                        "href": "http://schema.omg.org/spec/UML/2.0/uml.xml#" + _type
+                    }
                 };
                 Writer.addTo(json, 'ownedAttribute', node);
             });
