@@ -53,8 +53,10 @@ writer.elements['Model'] = function (elem) {
     } else {
       if (elem instanceof type.UMLPackage) {
         writer.writeElement(json, 'packagedElement', e)
+      } else if (e instanceof type.UMLAssociation) {
+        writer.writeElement(json, 'packagedElement', e)
       } else {
-        writer.writeElement(json, 'ownedMember', e)
+        writer.writeElement(json, 'packagedElement', e)
       }
     }
   })
@@ -461,6 +463,26 @@ writer.elements['UMLClassifier'] = function (elem) {
   var _ports = elem.attributes.filter(function (e) {
     return e instanceof type.UMLPort
   })
+
+  /*var associatedAttrs = elem.ownedElements.filter(oe => {
+    return oe instanceof type.UMLAssociation;
+  });
+
+  associatedAttrs.forEach(association => {
+    var ownedAttribute = {
+      'xmi:type': 'uml:Property',
+      'xmi:id': app.repository.generateGuid(),
+      'type': association._parent._id,
+      'association': association._id
+    }
+    _attrs.push(ownedAttribute);
+  });
+
+  <ownedAttribute xmi:type='uml:Property' xmi:id='_18_5_2_a69023f_1529666846182_255516_4700' visibility='private' type='_18_5_2_a69023f_1529666846501_369261_5308' association='_18_5_2_a69023f_1529666846166_74226_4675'>
+    <lowerValue xmi:type='uml:LiteralInteger' xmi:id='_18_5_2_a69023f_1529666846418_131758_5106'/>
+    <upperValue xmi:type='uml:LiteralUnlimitedNatural' xmi:id='_18_5_2_a69023f_1529666846418_99891_5105' value='10'/>
+</ownedAttribute>*/
+
   writer.writeElementArray(json, 'ownedAttribute', _attrs)
   writer.writeElementArray(json, 'ownedPort', _ports)
   writer.writeElementArray(json, 'ownedOperation', elem.operations)
@@ -1171,7 +1193,6 @@ writer.elements['UMLActivity'] = function (elem) {
     });
   }
   writer.writeElementArray(json, 'group', elem.groups)
-  writer.writeElementArray(json, 'node', elem.nodes)
   writer.writeElementArray(json, 'edge', edges)
   return json
 }
@@ -1191,6 +1212,11 @@ writer.elements['UMLInputPin'] = function (elem) {
 writer.elements['UMLOutputPin'] = function (elem) {
   var json = writer.elements['UMLPin'](elem)
   writer.setType(json, 'uml:OutputPin')
+  return json
+}
+
+writer.elements['UMLExceptionOutputPin'] = function (elem) {
+  var json = writer.elements['UMLOutputPin'](elem)
   return json
 }
 
@@ -1243,8 +1269,13 @@ writer.elements['UMLAction'] = function (elem) {
       writer.setType(json, 'uml:StructuredActivityNode')
       break
   }
-  writer.writeElementArray(json, 'input', elem.inputs)
-  writer.writeElementArray(json, 'output', elem.outputs)
+
+  if (elem.subactivity) {
+    writer.setType(json, 'uml:CallBehaviorAction')
+    writer.writeRef(json, 'behavior', elem.subactivity)
+  }
+  writer.writeElementArray(json, 'argument', elem.inputs)
+  writer.writeElementArray(json, 'result', elem.outputs)
   writer.writeBoolean(json, 'isLocallyReentrant', elem.isLocallyReentrant)
   writer.writeBoolean(json, 'isSynchronous', elem.isSynchronous)
   writer.writeString(json, 'language', elem.language)
@@ -1378,6 +1409,13 @@ writer.elements['UMLInterruptibleActivityRegion'] = function (elem) {
   writer.setType(json, 'uml:InterruptibleActivityRegion')
   writer.writeElementArray(json, 'node', elem.nodes)
   writer.writeElementArray(json, 'edge', elem.edges)
+  return json
+}
+
+writer.elements['UMLActivityParameter'] = function (elem) {
+  var json = writer.elements['UMLStructuralFeature'](elem)
+  writer.writeEnum(json, 'direction', 'UMLDirectionKind', elem.direction)
+  writer.setType(json, 'uml:ActivityParameter')
   return json
 }
 
