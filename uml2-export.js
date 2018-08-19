@@ -1194,6 +1194,7 @@ writer.elements['UMLActivity'] = function (elem) {
   }
   writer.writeElementArray(json, 'group', elem.groups)
   writer.writeElementArray(json, 'edge', edges)
+  writer.writeElementArray(json, 'node', elem.nodes)
   return json
 }
 
@@ -1415,7 +1416,7 @@ writer.elements['UMLInterruptibleActivityRegion'] = function (elem) {
 writer.elements['UMLActivityParameter'] = function (elem) {
   var json = writer.elements['UMLStructuralFeature'](elem)
   writer.writeEnum(json, 'direction', 'UMLDirectionKind', elem.direction)
-  writer.setType(json, 'uml:ActivityParameter')
+  writer.setType(json, 'uml:Parameter')
   return json
 }
 
