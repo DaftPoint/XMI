@@ -301,6 +301,16 @@ writer.enumerations['UMLObjectNodeOrderingKind'] = function (value) {
 writer.elements['UMLModelElement'] = function (elem) {
   var json = writer.elements['ExtensibleModel'](elem)
   // Write stereotype (it's not Standard, but it's the most convenient way to read
+  if (elem.stereotypes && elem.stereotypes.length > 0) {
+    elem.stereotypes.forEach(stereotype => {
+      var stereotypeJson = {
+        'name': stereotype.name,
+        'base_Element': elem._id,
+        'xmi:id': app.repository.generateGuid()
+      };
+      writer.stereotypes.push(stereotypeJson);
+    });
+  }
   if (typeof elem.stereotype === 'object' && elem.stereotype && elem.stereotype._id) {
     var stereotypeJson = {
       'name': elem.stereotype.name,
